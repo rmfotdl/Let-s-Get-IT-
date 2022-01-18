@@ -27,29 +27,29 @@
         word = newWord;
         $word.textContent = word;
         const order = Number($order.textContent);
-        if(order +1 > number){
+        if(order + 1 > number){
           $order.textContent = 1;
         }else{
-          $order.textContent +1;
+          $order.textContent = order + 1;
         }
       } else {
         if(word[word.length -1] === newWord[0]){
           word = newWord;
           $word.textContent = word;
           const order = Number($order.textContent);
-          if(order +1 > number){
+          if(order + 1 > number){
             $order.textContent = 1;
           }else{
-            $order.textContent +1;
+            $order.textContent = order +1;
           }
         }else{
-          
+          alert('올바르지 않은 단어입니다');
         }
       }
     };
     
     const onInput = (event) => {
-      console.log('글자 입력', event.target.value);
+      newWord = event.target.value;
     };
     
     $button.addEventListener('click',onClickButton);
