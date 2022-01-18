@@ -14,10 +14,47 @@
 
   <script>
     const number = Number(prompt('몇 명이 참가하나요 ?'));
-    console.log(typeof number);
-
     const $button = document.querySelector('button');
-    console.log($button);
+    const $input = document.querySelector('input');
+    const $word = document.querySelector('#word');
+    const $order = document.querySelector('#order');
+
+    let word ;
+    let newWord ;
+
+    const onClickButton = () => {
+      if(!word){
+        word = newWord;
+        $word.textContent = word;
+        const order = Number($order.textContent);
+        if(order +1 > number){
+          $order.textContent = 1;
+        }else{
+          $order.textContent +1;
+        }
+      } else {
+        if(word[word.length -1] === newWord[0]){
+          word = newWord;
+          $word.textContent = word;
+          const order = Number($order.textContent);
+          if(order +1 > number){
+            $order.textContent = 1;
+          }else{
+            $order.textContent +1;
+          }
+        }else{
+          
+        }
+      }
+    };
+    
+    const onInput = (event) => {
+      console.log('글자 입력', event.target.value);
+    };
+    
+    $button.addEventListener('click',onClickButton);
+    $input.addEventListener('input', onInput);
+
   </script>
 </body>
 </html>
