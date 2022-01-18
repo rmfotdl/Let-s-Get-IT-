@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>쿵쿵따 !</title>
+</head>
+<body>
+  <div><span id="order">1</span>번째 참가자의 차례입니다.</div>
+  <div>제시어는 [' <span id="word"></span> '] 입니다.</div>
+  <input type="text" onkeyup=enterkey();>
+  <button>입력</button>
+
+  <script>
+    const peple = Number(prompt('몇 명이 참여 하나요 ?'));
+    const $input = document.querySelector('input');
+    const $button = document.querySelector('button');
+    const $word = document.querySelector('#word');
+    const $order = document.querySelector('#order');
+
+    let word;
+    let newWord; // input에 입력되는 값을 가짐
+
+    const onClickButton = () => {
+      if(newWord.length === 3 && (!word || word[word.length -1] === newWord[0])){
+        // 첫번째 시작 값이 없음
+          word = newWord;
+          $word.textContent = word;
+
+          const order = Number($order.textContent);
+          if(order + 1 > peple){
+            $order.textContent = 1;
+          }else{
+            $order.textContent = order + 1;
+          };
+      }else{
+        //첫번째 시작 값이 들어있음
+        alert('세글자가 아니거나 앞머리가 틀렸습니다');    
+      };    
+      $input.value='';
+      $input.focus();
+    };
+
+    function enterkey(){
+      if(window.event.keyCode == 13){
+        onClickButton();
+      }
+    }
+
+    const onInput = () => {
+      newWord = event.target.value;
+    }
+    
+    
+    $button.addEventListener('click',onClickButton);
+    $input.addEventListener('input', onInput);
+  
+  </script>
+</body>
+</html>
