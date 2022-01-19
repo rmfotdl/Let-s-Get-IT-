@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div><span id="number">1</span>번째 참가자 순서입니다.</div>
+  <div>제시어 : <span id = "impo"></span></div>
+  <input type="text" onkeyup="keyEnter();">
+  <button>전송</button>
+
+  <script>
+    const number = Number(prompt('몇 명이서 게임을 즐기십니까 ?'));
+    const $input = document.querySelector('input');
+    const $button = document.querySelector('button');
+    const $impo = document.querySelector('#impo');
+    const $number = document.querySelector('#number');
+
+    $input.focus();
+
+    let keyword;
+    let NewKeyword;
+
+
+    const buttonevent = () => {
+      if(NewKeyword.length === 3 && (!keyword || keyword[keyword.length -1] === NewKeyword[0])){
+        keyword = NewKeyword;
+        $impo.textContent = keyword;
+
+        const ordinal = Number($number.textContent);
+        if(ordinal + 1 > number){
+          $number.textContent = 1;
+        }else{
+          $number.textContent = ordinal +1;
+        };
+        
+      }else{
+        alert('틀렸습니다. 3글자가 맞는지, 제시어의 뒷글자로 시작되는지 확인하십시오.');
+      };
+
+      $input.value = '';
+      $input.focus();
+    };
+
+    const keyEnter = () => {
+      if(window.event.keyCode == 13){
+        buttonevent();
+      }
+    }
+
+    const inputevent = () => {
+      NewKeyword= event.target.value;
+    }
+
+    $button.addEventListener('click', buttonevent)
+    $input.addEventListener('input', inputevent);
+  </script>
+</body>
+</html>
