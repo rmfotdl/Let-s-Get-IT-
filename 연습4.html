@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {text-align: center; width:100%;}
+    #keyWord {color:blueviolet;}
+  </style>
+</head>
+<body>
+  <div><span id="number">1</span>번의 순서입니다</div>
+  <div>제시어 : <span id="keyWord"></span></div>
+  <input type="text" onkeyup="keyEnter();">
+  <button>전송</button>
+
+  <script>
+    const started = Number(prompt('몇 명이서 게임을 시작하십니까 ?'));
+    const $input = document.querySelector('input');
+    const $button = document.querySelector('button');
+    const $keyWord = document.querySelector('#keyWord');
+    const $number = document.querySelector('#number');
+
+    $input.focus();
+
+    let key ;
+    let newKey ;
+
+    const onButtonEvent = () => {
+      if(!newKey){
+        alert('제시어를 입력해주세요');
+      }else if(!key || key[key.length -1] === newKey[0]){
+        key = newKey;
+        $keyWord.textContent = key;
+
+        const number = Number($number.textContent);
+        if(number+1 > started){
+          $number.textContent = 1;
+        }else{
+          $number.textContent = number + 1;
+        };
+      }else{
+        alert('잘못 입력하셨습니다.')
+      }
+      $input.value="";
+      $input.focus();
+    };
+
+    function keyEnter(){
+      if(window.event.keyCode == 13){
+        onButtonEvent();
+      }
+    };
+
+
+    const onInputEvent = () => {
+      newKey = event.target.value;
+    };
+
+    $button.addEventListener('click', onButtonEvent);
+    $input.addEventListener('input', onInputEvent);
+
+
+  </script>
+</body>
+</html>
