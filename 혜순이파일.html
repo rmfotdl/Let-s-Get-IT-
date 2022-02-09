@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {text-align: center; width:100%;}
+    #keyWord {color:blueviolet;}
+  </style>
+
+</head>
+<body>
+  <div>
+    <span id="turn">
+      1
+    </span>
+    번의 순서입니다
+  </div>
+  <div>제시어 : 
+    <span id="keyWord">
+    </span>
+  </div>
+  <input type="text" onkeyup="keyEnter();">
+  <button onclick="submit()">
+    전송
+  </button>
+
+  <script>
+      let turnCount = Number(prompt("몇명?"));
+
+      let submit = function() {
+        let inputTag = document.querySelector("input");
+        let keyword = document.getElementById("keyWord").textContent.trim();
+        let inputText = inputTag.value;
+        let nowTurn = Number(document.getElementById("turn").textContent);
+
+        if(inputText == "" || !inputText) {
+          alert("입력되지않았음.");
+          return;
+        } 
+
+        if(inputText.length != 3) {
+          alert("세글자만 입력하쇼");
+          return;
+        }
+
+        if(keyword != "" && inputText[0] != keyword[2]) {
+          alert("틀렸습니다!!!!!!!!!!!!!!!!!!");
+          return;
+        }
+
+        nowTurn = (nowTurn  % turnCount) + 1;
+        document.getElementById("keyWord").textContent = inputText;
+        document.getElementById("turn").textContent = nowTurn;
+        inputTag.value = "";
+      }
+
+
+      let keyEnter = function() {
+        if(window.event.keyCode == 13) {
+          submit();
+        }
+      }
+
+
+  </script>
+</body>
+</html>

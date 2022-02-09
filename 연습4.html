@@ -18,50 +18,53 @@
 
   <script>
     const started = Number(prompt('몇 명이서 게임을 시작하십니까 ?'));
-    const $input = document.querySelector('input');
-    const $button = document.querySelector('button');
-    const $keyWord = document.querySelector('#keyWord');
-    const $number = document.querySelector('#number');
+    if(started != 0) {
+      const $input = document.querySelector('input');
+      const $button = document.querySelector('button');
+      const $keyWord = document.querySelector('#kebyWord');
+      const $number = document.querySelector('#number');
 
-    $input.focus();
-
-    let key ;
-    let newKey ;
-
-    const onButtonEvent = () => {
-      if(!newKey){
-        alert('제시어를 입력해주세요');
-      }else if(!key || key[key.length -1] === newKey[0]){
-        key = newKey;
-        $keyWord.textContent = key;
-
-        const number = Number($number.textContent);
-        if(number+1 > started){
-          $number.textContent = 1;
-        }else{
-          $number.textContent = number + 1;
-        };
-      }else{
-        alert('잘못 입력하셨습니다.')
-      }
-      $input.value="";
       $input.focus();
-    };
 
-    function keyEnter(){
-      if(window.event.keyCode == 13){
-        onButtonEvent();
-      }
-    };
+      let key ;
+      let newKey ;
+
+      const onButtonEvent = () => {
+        if(!newKey){
+          alert('제시어를 입력해주세요');
+        }else if(!key || key[key.length -1] === newKey[0]){
+          key = newKey;
+          $keyWord.textContent = key;
+
+          const number = Number($number.textContent);
+          if(number+1 > started){
+            $number.textContent = 1;
+          }else{
+            $number.textContent = number + 1;
+          };
+        }else{
+          alert('잘못 입력하셨습니다.')
+        }
+        $input.value="";
+        $input.focus();
+      };
+
+      function keyEnter(){
+        if(window.event.keyCode == 13){
+          onButtonEvent();
+        }
+      };
 
 
-    const onInputEvent = () => {
-      newKey = event.target.value;
-    };
+      const onInputEvent = () => {
+        newKey = event.target.value;
+      };
 
-    $button.addEventListener('click', onButtonEvent);
-    $input.addEventListener('input', onInputEvent);
-
+      $button.addEventListener('click', onButtonEvent);
+      $input.addEventListener('input', onInputEvent);
+    } else {
+      alert('ㅂㅂ');
+    }
 
   </script>
 </body>
