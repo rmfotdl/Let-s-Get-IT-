@@ -43,13 +43,25 @@
 
     const $result = document.querySelector('#result');
     
-    const lottoNumber = lottoNum.slice(0, 6);
+    const lottoNumber = lottoNum.slice(0, 6).sort((a,b)=>a-b);
    
     function drawBall(i , parent){
       const divCreat = document.createElement('div')
       divCreat.className = 'ball';
       divCreat.textContent = i;
       parent.appendChild(divCreat);
+      if(i < 10){
+        divCreat.style.backgroundColor = 'red';
+        divCreat.style.color = 'white';
+      }else if(i < 20){
+        divCreat.style.backgroundColor = 'orange';
+        divCreat.style.color = 'white';
+      }else if(i < 30){
+        divCreat.style.backgroundColor = 'yellow';
+      }else{
+        divCreat.style.backgroundColor = 'blue';
+        divCreat.style.color = 'white';
+      }
     }
     
     for(let i=0; i<6; i++){
