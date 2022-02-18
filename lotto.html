@@ -27,16 +27,76 @@
 
   <script>
 
-    const candidata = Array(45).fill().map((v, i) => i + 1);
 
+    const candidata = Array(45).fill().map((v,i) => i + 1 );
+    
     const lottoNum = [];
-    for (let i = candidata.length; i > 0; i--){
-      const random = Math.floor(Math.random() * i);
-      const spliceArray = candidata.splice(random, 1);
-      const value = spliceArray[0];
-      lottoNum.push(value)
+    for(let i=candidata.length; i > 0; i--){
+      const random = Math.floor(Math.random() * candidata.length);
+      const index = candidata.splice(random, 1)
+      const value = index[0]
+
+      lottoNum.push(value);
     }
+
     console.log(lottoNum);
+
+    const $result = document.querySelector('#result');
+    
+    const lottoNumber = lottoNum.slice(0, 6);
+   
+    function drawBall(i , parent){
+      const divCreat = document.createElement('div')
+      divCreat.className = 'ball';
+      divCreat.textContent = i;
+      parent.appendChild(divCreat);
+    }
+    
+    for(let i=0; i<6; i++){
+      setTimeout(()=>{
+      drawBall(lottoNumber[i], $result)
+    },1000 *(i+1)) }
+  
+    const $bonus = document.querySelector('#bonus');
+    const bonus = lottoNum[6];
+
+    setTimeout(()=>{
+      drawBall(bonus, $bonus)
+    },7000)
+
+
+    // const candidata = Array(45).fill().map((v, i) => i + 1);
+
+    // const lottoNum = [];
+    // for (let i = candidata.length; i > 0; i--){
+    //   const random = Math.floor(Math.random() * i);
+    //   const spliceArray = candidata.splice(random, 1);
+    //   const value = spliceArray[0];
+    //   lottoNum.push(value)
+    // }
+    // console.log(lottoNum);
+    // const winBalls = lottoNum.slice(0,6).sort((a,b) => a - b);
+    // const bonus = lottoNum[6];
+    // console.log(winBalls, bonus);
+
+    // const $result= document.querySelector('#result');
+    // for(let i=0; i < winBalls.length; i++){
+    // setTimeout(()=>{
+    //   const $ball= document.createElement('div');
+    //   $ball.className = 'ball';
+    //   $ball.textContent = winBalls[i]
+    //   $result.appendChild($ball);
+    //   },1000* (i + 1) );
+    // }
+
+    // const $bonus = document.querySelector('#bonus');
+    // setTimeout(()=>{
+    //   const $ball = document.createElement('div');
+    //   $ball.className = 'ball';
+    //   $ball.textContent = bonus;
+    //   $bonus.appendChild($ball);
+    // },7000);
+
 
   </script>
 </body>
