@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반응속도 테스트</title>
+
+  <style>
+    #screen {
+      width:300px;
+      height:200px;
+      text-align: center;
+      user-select:none;
+    }
+    #screen.waiting{
+      background-color: aqua;
+    }
+    #screen.ready{
+      background-color: red;
+      color:white;
+    }
+    #screen.now{
+      background-color: greenyellow;
+    }
+  </style>
+
+</head>
+<body>
+  <div id="screen" class="waiting">클릭해서 시작하세요</div>
+  <div id="result"></div>
+
+  <script>
+
+    const $screen = document.querySelector('#screen');
+    const $result = document.querySelector('#result');
+
+    let startTime ;
+    let endTime ;
+    const records = [];
+    let timeoutId;
+    
+
+    $screen.addEventListener('click', ()=> {
+      if($screen.classList.contains('waiting')){
+
+        $screen.classList.replace('waiting','ready');
+        $screen.textContent='초록색이 되기를 기다리셈';
+        timeoutId = setTimeout(()=>{
+          startTime = new Date();
+          $screen.classList.replace('ready','now');
+          $screen.textContent="클릭해!"
+        },Math.floor(Math.random()*1000)+2000);
+
+      }else if($screen.classList.contains('ready')){
+
+        clearTimeout(timeoutId);
+        $screen.classList.replace('ready', 'waiting');
+        $screen.textContent='타이밍 맞춰 누르셈! 다시 클릭부터 !'
+
+      }else if($screen.classList.contains('now')){
+
+        endTime = new Date();
+        const current = endTime - startTime;
+        records.push(current);
+        const average = records.reduce((a,b) => a+b) / records.length;
+
+        $result.textContent = `현재 ${current}ms, 평균 : ${average}ms`
+
+        let spdstart = records.sort((a,b)=>a-b).slice(0,5);
+        spdstart.forEach((top,index)=>{
+          $result.append(
+            document.createElement('br'),
+            `${index+1}등 : ${top}`
+          )
+        })
+
+
+        // let spdstart = records.sort((a,b)=>a-b).slice(0,5);
+        // spdstart.forEach((top, index)=>{
+        //   $result.append(
+        //     document.createElement('br'),
+        //     `${index +1}위 : ${top}ms`
+        //   )
+        // })
+
+        startTime = null;
+        endTime = null;
+        $screen.classList.replace('now', 'waiting');
+        $screen.textContent="클릭해서 시작하세요"
+      }
+    })
+
+
+  </script>
+</body>
+</html>
