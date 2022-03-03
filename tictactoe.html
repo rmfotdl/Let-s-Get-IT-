@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>틱텍토 게임</title>
+
+  <style>
+    table{
+      border-collapse: collapse;
+    }
+    td{
+      border:1px solid black;
+      width:40px;
+      height:40px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <script>
+
+    const {body} = document;
+    const $table = document.createElement('table');
+    const $result = document.createElement('div');
+
+    const rows = [];
+    let turn ='0';
+
+    const checkWinner = (target) => {
+      const rowIndex = target.parentNode.rowIndex;
+      // const cellIndex = target.cellIndex;
+      console.log(Array.from(target.parentNode.children));
+      console.log(Array.from(target.parentNode.children).indexOf(target));
+      //세칸이 다 채워졌는가 ?
+      let hasWinner = false;
+      //가로줄 검사
+      if(
+        rows[rowIndex][0].textContent === turn &&
+        rows[rowIndex][1].textContent === turn &&
+        rows[rowIndex][2].textContent === turn
+      ){
+        hasWinner = true;
+      }
+      //세로줄 검사
+      if(
+        rows[0][0].textContent === turn &&
+        rows[0][1].textContent === turn &&
+        rows[0][2].textContent === turn
+      ){
+        hasWinner = true;
+      }
+      //대각선 검사
+      if(
+        rows[0][2].textContent === turn &&
+        rows[1][1].textContent === turn &&
+        rows[2][0].textContent === turn
+      ){
+        hasWinner =true;
+      }
+      if(
+        rows[0][0].textContent === turn &&
+        rows[1][1].textContent === turn &&
+        rows[2][2].textContent === turn
+      ){
+        hasWinner =true;
+      }
+        return hasWinner
+    };
+
+    const callback = (event) => {
+      if(event.target.textContent !== ''){
+        console.log('빈칸이 아닙니다.')
+        return;
+      }else{
+        console.log('빈칸입니다.');
+        event.target.textContent = turn;
+        const hasWinner = checkWinner(event.target);
+        if(hasWinner){
+          $result.textContent = `${turn}님이 승리!`
+          $table.removeEventListener('click',callback);
+          return;
+        }
+      };
+      //승자가 없으면
+      const draw = rows.flat().every((cell) => cell.textContent);
+      if(draw){
+        $result.textContent = '무승부';
+        return;
+      }
+      turn = turn === 'x'?'0':'x'
+    };
+
+    for(let i =1; i<=3; i++){
+      const $tr = document.createElement('tr');
+      const cells = [];
+      for(let j=1; j<=3; j++){
+        const $td = document.createElement('td');
+        // $td.addEventListener('click', callback);
+        cells.push($td);
+        $tr.appendChild($td);
+      }
+      rows.push(cells);
+      $table.appendChild($tr);
+      $table.addEventListener('click',callback);
+    }
+    body.appendChild($table);
+    body.appendChild($result);
+
+    
+
+
+
+    // 1분 퀴즈 , 5줄 4칸의 이차원 배열을 만들어보세요.
+
+    // const {body} = document;
+    // const $table = document.createElement('table');
+    // const $result = document.createElement('div')  
+
+    // const row = [];
+    
+    // for(let i=1; i<=5; i++){
+    //   const $tr = document.createElement('tr');
+    //   const $td =[];
+
+    //   for(let j=1; j<=4; j++){
+    //     const $tdContent = document.createElement('td');
+    //     $td.push($tdContent);
+    //     $tr.appendChild($tdContent)
+    //   }
+
+    //   row.push($td)
+    //   $table.appendChild($tr)
+
+    // }
+    // body.appendChild($table);
+    // dody.appendChild($result);
+    
+
+    //1분 퀴즈
+    // const array = [1,'hello', null, undefined, false];
+    // const sh = array.some((value)=>value === null);
+    // console.log(sh);
+  </script>
+</body>
+</html>
