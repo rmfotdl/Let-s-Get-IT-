@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카드 짝 맞추기 게임</title>
+
+  <style>
+    .card{display: inline-block; margin-right: 20px; margin-bottom:20px; width:70px; height:100px; perspective: 140px;}
+    .card-inner{position:relative; width:100%; height:100%; text-align: center; transition:transform 0.8s; transform-style: preserve-3d;}
+    .card.flipped .card-inner {transform:rotateY(180deg);}
+    .card-front{background: navy;}
+    .card-front, .card-back {position:absolute; width:100%; height:100%; border:1px solid black; backface-visibility: hidden;}
+    .card-back {transform:rotateY(180deg);}
+  </style>
+</head>
+<body>
+  <div id="wrapper"></div>
+  <script>
+    const $wrapper = document.querySelector('#wrapper');
+
+    const total = 12;
+    const colors = ['red', 'yellow', 'black', 'pink', 'orange', 'green'];
+    let colorCopy = colors.concat(colors);
+    let creatCard = [];
+    let towCard =[];
+    let answCard =[];
+    let clicked = false;
+
+    function creatC(){//랜덤카드 배정
+      for(i=0; colorCopy.length > 0; i+=1){
+        const randomIndex = Math.floor(Math.random()*colorCopy.length);
+        creatCard = creatCard.concat(colorCopy.splice(randomIndex,1));
+      }
+    }
+
+    function creatDiv(i){//html 구조 생성
+      const card = document.createElement('div');
+      card.className = 'card';
+      const cardInner = document.createElement('div');
+      cardInner.className = 'card-inner';
+      const cardFront = document.createElement('div');
+      cardFront.className = 'card-front';
+      const cardBack = document.createElement('div');
+      cardBack.className = 'card-back';
+      cardBack.style.backgroundColor = creatCard[i];
+      card.appendChild(cardInner);
+      cardInner.appendChild(cardFront);
+      cardInner.appendChild(cardBack);
+
+      return card;
+    }
+
+    function onClickcard(){
+      if(!clicked || answCard.includes(this) || towCard[0]===this){
+        return;
+      }
+      this.classList.toggle('flipped');
+      towCard.push(this);
+      if(towCard.length !== 2){
+        return;
+      }
+      const fistBackCard = towCard[0].querySelector('.card-back').style.backgroundColor;
+      const towBackCard = towCard[1].querySelector('.card-back').style.backgroundColor;
+      if(fistBackCard === towBackCard){
+        answCard.push(towCard[0]);
+        answCard.push(towCard[1]);
+        towCard = [];
+        setTimeout(() => {
+          if(answCard.length !== total){
+            return;
+          }
+          alert('축하합니다')
+          resetGame()
+        }, 500);
+        return
+      }
+      clicked = false;
+      setTimeout(()=>{
+        towCard[0].classList.remove('flipped');
+        towCard[1].classList.remove('flipped');
+        towCard =[];
+        clicked = true;
+        return
+      },500)
+    }
+
+    function resetGame (){
+      $wrapper.innerHTML ='';
+      let colorCopy = colors.concat(colors);
+      let creatCard = [];
+      let towCard =[];
+      let answCard =[];
+      clicked = false;
+      startGame();
+    }
+
+    function startGame(){
+      creatC();
+      for(i=0; i < total; i+=1){
+        const card = creatDiv(i);
+        card.addEventListener('click', onClickcard)
+        $wrapper.appendChild(card);
+      }
+
+      document.querySelectorAll('.card').forEach((card,index)=>{
+        setTimeout(()=>{
+          card.classList.add('flipped')
+        },1000+100*index)
+      })
+
+      setTimeout(()=>{
+        document.querySelectorAll('.card').forEach((card)=>{
+          card.classList.remove('flipped');
+        })
+        clicked = true;
+      },4000)
+    }
+
+    startGame();
+
+
+  </script>
+</body>
+</html>
