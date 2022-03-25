@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지뢰찾기 게임</title>
+
+  <style>
+    table {border-collapse: collapse;}
+    td {border: 1px solid #bbb; text-align: center; line-height: 20px; width:20px; height:20px; background:black;}
+    td.poende {background:white;}
+    td.flag {background:red;}
+    td.question {background:orange;}
+  </style>
+</head>
+<body>
+  <input type="number" id="hor" placeholder="가로" value="10">
+  <input type="number" id="ver" placeholder="세로" value="10">
+  <input type="number" id="mine" placeholder="지뢰" value="20">
+  <button id="exec">실행</button>
+  <table id="table">
+    <tbody></tbody>
+    <script src="../js/mine2.js"></script>
+  </table>
+  <div id="result"></div>
+</body>
+
+<script>
+  const execute = document.querySelector('#exec');
+  const horizontal = document.querySelector('#hor').value;
+  const vertical = document.querySelector('#ver').value;
+  const mine = parseInt(document.querySelector('#mine').value);
+  const tbody = document.querySelector('#table tbody');
+
+  let dataset = [];
+  
+</script>
+
+</html>
