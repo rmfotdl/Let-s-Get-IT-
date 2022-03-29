@@ -8,33 +8,88 @@
 
   <style>
     table {border-collapse: collapse;}
-    td {border: 1px solid #bbb; text-align: center; line-height: 20px; width:20px; height:20px; background:black;}
+    td {border: 1px solid #bbb; text-align: center; line-height: 20px; width:20px; height:20px; background:#888;}
     td.poende {background:white;}
     td.flag {background:red;}
     td.question {background:orange;}
   </style>
 </head>
 <body>
-  <input type="number" id="hor" placeholder="가로" value="10">
+  <!-- <input type="number" id="hor" placeholder="가로" value="10">
   <input type="number" id="ver" placeholder="세로" value="10">
   <input type="number" id="mine" placeholder="지뢰" value="20">
-  <button id="exec">실행</button>
+  <button id="exec">실행</button> -->
   <table id="table">
     <tbody></tbody>
-    <script src="../js/mine2.js"></script>
   </table>
   <div id="result"></div>
 </body>
 
 <script>
-  const execute = document.querySelector('#exec');
-  const horizontal = document.querySelector('#hor').value;
-  const vertical = document.querySelector('#ver').value;
-  const mine = parseInt(document.querySelector('#mine').value);
-  const tbody = document.querySelector('#table tbody');
+  // const execute = document.querySelector('#exec');
+  // const horizontal = document.querySelector('#hor').value;
+  // const vertical = document.querySelector('#ver').value;
+  const $tbody = document.querySelector('#table tbody');
+  const $result = document.querySelector('#result');
+  const row = 10; //줄
+  const cell = 10; //칸
+  const mine = 10;
+  const CODE = {
+    NORMAL : -1,
+    QUESTION : -2,
+    FLAG : -3,
+    QUESSTION_MINE : -4,
+    FLAG_MINE : -5,
+    MINE : -6,
+    OPENED : 0, //0 이상이면 모두 열린칸
+  }
+  let data;
 
-  let dataset = [];
-  
+  function plantMine(){
+    const candidate = Array(row*cell).fill().map((arr,i)=>{return i});
+
+    const shuffle =[];
+
+    while(candidate.length > row*cell-mine){
+      const chosen = candidate.splice(Math.floor(Math.random()*candidate.length),1)[0];
+      shuffle.push(chosen);
+    }
+
+    const data = [];
+
+    for(let i=0; i<row; i++){
+      const rowData = [];
+      data.push(rowData);
+      for(let j=0; j<cell; j++){
+        rowData.push(CODE.NORMAL);
+      }
+    }
+
+    for(k=0; k<shuffle.length; k++){
+      const ver = Math.floor(shuffle[k] / cell);
+      const hor = shuffle[k] % cell;
+      ; 
+      data [ver][hor] = CODE.MINE;
+    }
+    return data;
+  }
+
+  function drawTable(){
+    data = plantMine();
+    data.forEach((row)=>{
+      const $tr = document.createElement('tr');
+      row.forEach((cell)=>{
+        const $td = document.createElement('td');
+        if(cell === CODE.MINE){
+          $td.textContent = 'x';
+        }
+        $tr.append($td);
+      })
+      $tbody.append($tr);
+    })
+  }
+
+  drawTable();  
 </script>
 
 </html>
