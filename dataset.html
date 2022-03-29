@@ -46,50 +46,87 @@
   let data;
 
   function plantMine(){
-    const candidate = Array(row*cell).fill().map((arr,i)=>{return i});
+    const candidata = Array(row*cell).fill().map((arr,i)=>{return i});
 
-    const shuffle =[];
+    const shuffle = [];
 
-    while(candidate.length > row*cell-mine){
-      const chosen = candidate.splice(Math.floor(Math.random()*candidate.length),1)[0];
-      shuffle.push(chosen);
+    while(candidata.length > row*cell -mine){
+      const cheson = candidata.splice(Math.floor(Math.random()*candidata.length),1)[0];
+      shuffle.push(cheson)
     }
 
     const data = [];
 
-    for(let i=0; i<row; i++){
-      const rowData = [];
+    for(let i=0; i<row; i++){// 10번 반복 -1 10개짜리 이차원배열 10개  data에 추가
+      const rowData =[];
       data.push(rowData);
-      for(let j=0; j<cell; j++){
+      for(let j=0; j<cell; j++){ //-1배열 10개 rowData에 추가
         rowData.push(CODE.NORMAL);
-      }
+      } 
+    }    
+
+    for(let k=0; k<shuffle.length; k++){
+      const ver = Math.floor(shuffle[k]/cell);
+      const hor = shuffle[k]%cell;
+      data[ver][hor] = CODE.MINE;
     }
 
-    for(k=0; k<shuffle.length; k++){
-      const ver = Math.floor(shuffle[k] / cell);
-      const hor = shuffle[k] % cell;
-      ; 
-      data [ver][hor] = CODE.MINE;
-    }
     return data;
   }
 
-  function drawTable(){
+  function drowTable(){
     data = plantMine();
     data.forEach((row)=>{
       const $tr = document.createElement('tr');
       row.forEach((cell)=>{
         const $td = document.createElement('td');
         if(cell === CODE.MINE){
-          $td.textContent = 'x';
+          $td.textContent='x';
         }
         $tr.append($td);
       })
       $tbody.append($tr);
+      $tbody.addEventListener('contextmenu', onRightClick);
     })
   }
 
-  drawTable();  
+  drowTable();
+
+  function onRightClick(event){
+    event.preventDefault();
+    const target = event.target;
+    const rowIndex = target.parentNode.rowIndex;
+    const cellIndex = target.cellIndex;
+
+    const cellData = data[rowIndex][cellIndex];
+
+    if(cellData === CODE.MINE){ //지뢰면
+      data[rowIndex][cellIndex] = CODE.QUESSTION_MINE; // 물음표 지뢰로 변경
+      target.className = 'question';
+      target.textContent ='?';
+    }else if(cellData === CODE.QUESSTION_MINE){ // 물음표 지뢰면
+      data[rowIndex][cellIndex] = CODE.FLAG_MINE; //깃발 지뢰로
+      target.className ='flag';
+      target.textContent ='!';
+    }else if(cellData === CODE.FLAG_MINE){//깃발지뢰면
+      data[rowIndex][cellIndex] = CODE.MINE;
+      target.className ='';
+      target.textContent='x'
+    }else if(cellData === CODE.NORMAL){//닫힌칸이면
+      data[rowIndex][cellIndex]=CODE.QUESTION; //물음표로
+      target.className = 'question';
+      target.textContent="?";
+    }else if(cellData === CODE.QUESTION){
+      data[rowIndex][cellIndex]=CODE.FLAG//닫힌 칸으로
+      target.className ='flag';
+      target.textContent ='!';
+    }else if(cellData ===CODE.FLAG){ //깃발이면
+      data[rowIndex][cellIndex]=CODE.NORMAL//닫힌 칸으로
+      target.className = '';
+      target.textContent='';
+    }
+  }
+
 </script>
 
 </html>
