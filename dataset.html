@@ -9,7 +9,7 @@
   <style>
     table {border-collapse: collapse;}
     td {border: 1px solid #bbb; text-align: center; line-height: 20px; width:20px; height:20px; background:#888;}
-    td.poende {background:white;}
+    td.opened {background:white;}
     td.flag {background:red;}
     td.question {background:orange;}
   </style>
@@ -44,6 +44,7 @@
     OPENED : 0, //0 이상이면 모두 열린칸
   }
   let data;
+  let openCount = 0;
 
   function plantMine(){
     const candidata = Array(row*cell).fill().map((arr,i)=>{return i});
@@ -73,24 +74,6 @@
 
     return data;
   }
-
-  function drowTable(){
-    data = plantMine();
-    data.forEach((row)=>{
-      const $tr = document.createElement('tr');
-      row.forEach((cell)=>{
-        const $td = document.createElement('td');
-        if(cell === CODE.MINE){
-          $td.textContent='x';
-        }
-        $tr.append($td);
-      })
-      $tbody.append($tr);
-      $tbody.addEventListener('contextmenu', onRightClick);
-    })
-  }
-
-  drowTable();
 
   function onRightClick(event){
     event.preventDefault();
@@ -126,6 +109,87 @@
       target.textContent='';
     }
   }
+
+  function countMine(rowIndex, cellIndex){
+    const mines = [CODE.MINE, CODE.QUESSTION_MINE, CODE.FLAG_MINE];
+    let i =0;
+    mines.includes(data[rowIndex-1]?.[cellIndex -1]) && i++;
+    mines.includes(data[rowIndex-1]?.[cellIndex]) && i++;
+    mines.includes(data[rowIndex-1]?.[cellIndex +1]) && i++;
+    mines.includes(data[rowIndex][cellIndex -1]) && i++;
+    mines.includes(data[rowIndex][cellIndex +1]) && i++;
+    mines.includes(data[rowIndex+1]?.[cellIndex -1]) && i++;
+    mines.includes(data[rowIndex+1]?.[cellIndex]) && i++;
+    mines.includes(data[rowIndex+1]?.[cellIndex +1]) && i++;
+    return i;
+  }
+
+  function onLeftClick(event){
+    const target = event.target; //td태그
+    const rowIndex = target.parentNode.rowIndex;
+    const cellIndex = target.cellIndex;
+    const cellData = data[rowIndex][cellIndex];
+    if(cellData === CODE.NORMAL){//닫힌칸이면
+      onponAround(rowIndex,cellIndex);
+    } else if (cellData === CODE.MINE){//지뢰칸이면
+      target.textContent = '펑!'
+      target.className='opened';
+      $tbody.removeEventListener('contextmenu', onRightClick);
+      $tbody.removeEventListener('click', onLeftClick);
+    }
+  }
+
+  function open(rowIndex,cellIndex){
+    if(data[rowIndex]?.[cellIndex] >= CODE.OPENED) return;
+    const target = $tbody.children[rowIndex]?.children[cellIndex];
+    if(!target){
+      return;
+    }
+    const count = countMine(rowIndex,cellIndex);
+    target.textContent=count || '';
+    target.className = 'opened';
+    data[rowIndex][cellIndex] = count;
+    openCount++;
+    console.log(openCount);
+    return count;
+  }
+
+  function onponAround(rI,cI){
+    setTimeout(()=>{
+      const count = open(rI,cI);
+      if(count === 0){
+        open(rI -1, cI -1);
+        open(rI -1, cI);
+        open(rI -1, cI +1);
+        open(rI, cI -1);
+        open(rI, cI +1);
+        open(rI +1, cI -1);
+        open(rI +1, cI);
+        open(rI +1, cI +1);
+      }
+    },0);
+  }
+
+  function drowTable(){
+    data = plantMine();
+    data.forEach((row)=>{
+      const $tr = document.createElement('tr');
+      row.forEach((cell)=>{
+        const $td = document.createElement('td');
+        if(cell === CODE.MINE){
+          $td.textContent='x';
+        }
+        $tr.append($td);
+      })
+      $tbody.append($tr);
+      $tbody.addEventListener('contextmenu', onRightClick);
+      $tbody.addEventListener('click', onLeftClick)
+    })
+  }
+
+  drowTable();
+
+  
 
 </script>
 
