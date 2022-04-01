@@ -176,8 +176,12 @@
         //지뢰칸이면
         target.textContent = "펑!";
         target.className = "opened";
+        clearInterval(interval);
         $tbody.removeEventListener("contextmenu", onRightClick);
         $tbody.removeEventListener("click", onLeftClick);
+        setTimeout(()=>{
+          alert(`실패!`);
+        },0);
       }
     }
 
