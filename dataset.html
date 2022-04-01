@@ -31,9 +31,9 @@
   </head>
   <body>
     <form id="form">
-      <input type="number" id="row" placeholder="가로" value="10">
-      <input type="number" id="cell" placeholder="세로" value="10">
-      <input type="number" id="mine" placeholder="지뢰" value="20">
+      <input type="number" id="row" placeholder="가로" value="">
+      <input type="number" id="cell" placeholder="세로" value="">
+      <input type="number" id="mine" placeholder="지뢰" value="">
       <button id="exec">생성</button>
     </form>
     
@@ -45,9 +45,9 @@
   </body>
 
   <script>
-    // const execute = document.querySelector('#exec');
-    // const horizontal = document.querySelector('#hor').value;
-    // const vertical = document.querySelector('#ver').value;
+    const execute = document.querySelector('#exec');
+    const horizontal = document.querySelector('#row').value;
+    const vertical = document.querySelector('#cell').value;
     const $form = document.querySelector("#form");
     const $timer = document.querySelector("#timer");
     const $tbody = document.querySelector("#table tbody");
@@ -81,11 +81,13 @@
       clearInterval(interval);
       $tbody.innerHTML='';
       drowTable();
+      
       startTime = new Date;
       interval = setInterval(()=>{
         const time = Math.floor((new Date() - startTime)/1000);
         $timer.textContent = `${time}초`
-      }, 1000)
+      }, 1000)      
+      
     }
     $form.addEventListener('submit', onSubmit);
 
@@ -197,6 +199,7 @@
         onponAround(rowIndex, cellIndex);
       } else if (cellData === CODE.MINE) {
         //지뢰칸이면
+        showMines();
         target.textContent = "펑!";
         target.className = "opened";
         clearInterval(interval);
@@ -205,6 +208,8 @@
         $tbody.removeEventListener("click", onLeftClick);
         setTimeout(()=>{
           alert(`실패!`);
+          $tbody.innerHTML='';
+          onSubmit();
         },0);
       }
     }
@@ -229,7 +234,10 @@
         setTimeout(()=>{
           alert(`승리했습니다! ${time}초가 걸렸습니다.`);
         },0);
+        $tbody.innerHTML='';
+        onSubmit()
       }
+      
       return count;
     }
 
@@ -271,7 +279,19 @@
       }
     }
 
+    function showMines(){
+      const mines = [CODE.MINE, CODE.QUESSTION_MINE, CODE.FLAG_MINE];
+      data.forEach((row,rowIndex)=>{
+        row.forEach((cell, cellIndex)=>{
+          if(mines.includes(cell)){
+            $tbody.children[rowIndex].children[cellIndex].textContent ='x';
+          }
+        });
+      });
+    }
+
     function drowTable() {
+      
       data = plantMine();
       data.forEach((row) => {
         const $tr = document.createElement("tr");
@@ -286,6 +306,7 @@
         $tbody.addEventListener("contextmenu", onRightClick);
         $tbody.addEventListener("click", onLeftClick);
       });
+      
     }
 
     drowTable();
