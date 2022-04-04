@@ -31,19 +31,19 @@
     const $score = document.getElementById('score');
     let data = [];
 
-    function startGame(){
-      const $fragment =document.createDocumentFragment();
-      [1,2,3,4].forEach(function(){
-        const rowData = [];
-        data.push(rowData);
+    function startGame() {
+      const $fragment = document.createDocumentFragment();
+      [1,2,3].forEach(()=>{
+        const rowData =[];
         const $tr = document.createElement('tr');
-        [1,2,3,4].forEach(()=>{
+        data.push(rowData);
+        [1,2,3].forEach(()=>{
+          const $td = document.createElement('td');
           rowData.push(0);
-          const $td =document.createElement('td');
           $tr.appendChild($td);
         });
         $fragment.appendChild($tr);
-      });
+      })
       $table.appendChild($fragment);
       put2ToRandomCell();
       draw();
