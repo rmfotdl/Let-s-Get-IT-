@@ -33,11 +33,11 @@
 
     function startGame() {
       const $fragment = document.createDocumentFragment();
-      [1,2,3].forEach(()=>{
+      [1,2,3,4].forEach(()=>{
         const rowData =[];
         const $tr = document.createElement('tr');
         data.push(rowData);
-        [1,2,3].forEach(()=>{
+        [1,2,3,4].forEach(()=>{
           const $td = document.createElement('td');
           rowData.push(0);
           $tr.appendChild($td);
@@ -46,6 +46,14 @@
       })
       $table.appendChild($fragment);
       put2ToRandomCell();
+      
+      data = [
+        [0,2,4,2],
+        [0,0,8,0],
+        [2,2,2,2],
+        [0,16,0,4],
+      ]
+
       draw();
     }
 
@@ -78,6 +86,91 @@
     }
 
     startGame();
+
+    function moveCells(direction){
+      switch(direction){
+        case 'left':{
+          const newData = [[],[],[],[]];
+          data.forEach((rowData,i)=>{
+            rowData.forEach((cellData, j)=>{
+              if (cellData){
+                const currentRiw = newData[i]
+                const prevData = MediaStreamAudioSourceNode[currentRiw.length -1];
+                if(prevData === cellData){
+                  currentRiw[currentRiw.length -1] *= -2;
+                }else{
+                  newData[i].push(cellData);
+                }
+              }
+            })
+          })
+          console.log(newData);
+          [1,2,3,4].forEach((rowData, i)=>{
+            [1,2,3,4].forEach((cellData, j)=>{
+              data[i][j] = newData[i][j] || 0;
+            });
+          });
+          break;
+        }
+        case 'right':{
+          const newData = [[],[],[],[]];
+          data.forEach((rowData,i)=>{
+            rowData.forEach((cellData,j)=>{
+              if(rowData[3 -j]){
+                const currentRiw = newData[i]
+                const pre = currentRiw[currentRiw.length -1] *= -2;
+              }else{
+                newData[i].push(rowData[3-j]);
+              }
+            })
+          })
+          console.log(newData);
+          [1,2,3,4].forEach((rowData,i)=>{
+            [1,2,3,4].forEach((cellData,j)=>{
+              data[i][3-j]=Math.abs(newData[i][j]) || 0
+            });
+          });
+          break;
+        }
+        case 'up':
+          break;
+        case 'down':
+          break;
+      }
+      draw();
+    }
+
+    window.addEventListener('keyup', (event)=>{
+      if(event.key === 'ArrowUp'){
+        moveCells('up');
+      } else if(event.key === 'ArrowDown'){
+        moveCells('down')
+      } else if(event.key === 'ArrowLeft'){
+        moveCells('left')
+      } else if(event.key === 'ArrowRight'){
+        moveCells('right');
+      }
+    });
+
+    let startCoord;
+    window.addEventListener('mousedown',(event)=>{
+      startCoord = [event.clientX, event.clientY];
+    });
+    window.addEventListener('mouseup', (event)=>{
+      const endCoord = [event.clientX, event.clientY];
+      const diffX = endCoord[0] - startCoord[0];
+      const diffY = endCoord[1] - startCoord[1];
+      if(diffX < 0 && Math.abs(diffX) > Math.abs(diffY)){
+        moveCells('left');
+      }else if(diffX > 0 && Math.abs(diffX) > Math.abs(diffY)){
+        moveCells('right');
+      }else if(diffY > 0 && Math.abs(diffX) <= Math.abs(diffY)){
+        moveCells('right');
+      }else if(diffY > 0 && Math.abs(diffX) <= Math.abs(diffY)){
+        moveCells('right');
+      }
+    });
+
   </script>
 </body>
 </html>
