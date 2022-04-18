@@ -65,6 +65,31 @@
         background-color: #dec22e;
         color: #776e65;
       }
+      .color-4096 {
+        background-color: #e09ffa;
+        color: #776e65;
+      }
+      .color-8192 {
+        background-color: #2cabff;
+        color: #ffffff;
+      }
+      .color-16384 {
+        background-color: #008ce9;
+        color: #ffffff;
+      }
+      .color-32768 {
+        background-color: #004d80;
+        color: #ffffff;
+      }
+      .color-65536 {
+        background-color: #1fff3d;
+        color: #ffffff;
+      }
+      .color-131072 {
+        background-color: #048300;
+        color: #ffffff;
+        font-size: 30px !important;
+      }
     </style>
   </head>
   <body>
@@ -260,11 +285,11 @@
             break;
           }
         }
-        if (data.flat().includes(2048)) {
+        if (data.flat().includes(16384)) {
           // 승리
           draw();
           setTimeout(() => {
-            alert("축하합니다. 2048을 만들었습니다!");
+            alert("축하합니다. 131072을 만들었습니다!");
           }, 0);
         } else if (!data.flat().includes(0)) {
           // 빈 칸이 없으면 패배
